@@ -122,7 +122,7 @@ func (k Keeper) takeValidatorFeePoolRewards(ctx sdk.Context, operatorAddr sdk.Va
 	return nil
 }
 
-func (k Keeper) withdrawValidatorCommission(ctx sdk.Context, operatorAddr sdk.ValAddress) (types.FeePool, types.DecCoins) {
+func (k Keeper) withdrawValidatorCommission(ctx sdk.Context, operatorAddr sdk.ValAddress) (types.FeePool, sdk.DecCoins) {
 	valInfo := k.GetValidatorDistInfo(ctx, operatorAddr)
 	wc := k.GetWithdrawContext(ctx, operatorAddr)
 	valInfo, feePool, commission := valInfo.WithdrawCommission(wc)

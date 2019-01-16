@@ -16,8 +16,6 @@ type (
 	ValidatorDistInfo     = types.ValidatorDistInfo
 	TotalAccum            = types.TotalAccum
 	FeePool               = types.FeePool
-	DecCoin               = types.DecCoin
-	DecCoins              = types.DecCoins
 
 	MsgSetWithdrawAddress          = types.MsgSetWithdrawAddress
 	MsgWithdrawDelegatorRewardsAll = types.MsgWithdrawDelegatorRewardsAll
@@ -27,7 +25,7 @@ type (
 	GenesisState = types.GenesisState
 
 	// expected keepers
-	StakingKeeper         = types.StakingKeeper
+	StakingKeeper       = types.StakingKeeper
 	BankKeeper          = types.BankKeeper
 	FeeCollectionKeeper = types.FeeCollectionKeeper
 )
@@ -71,7 +69,7 @@ const (
 	StoreKey         = types.StoreKey
 	TStoreKey        = types.TStoreKey
 	RouterKey        = types.RouterKey
-	QuerierRoute       = types.QuerierRoute
+	QuerierRoute     = types.QuerierRoute
 )
 
 var (

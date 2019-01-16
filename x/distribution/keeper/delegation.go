@@ -100,7 +100,7 @@ func (k Keeper) RemoveDelegatorWithdrawAddr(ctx sdk.Context, delAddr, withdrawAd
 // return all rewards for a delegation
 func (k Keeper) withdrawDelegationReward(ctx sdk.Context,
 	delAddr sdk.AccAddress, valAddr sdk.ValAddress) (types.FeePool,
-	types.ValidatorDistInfo, types.DelegationDistInfo, types.DecCoins) {
+	types.ValidatorDistInfo, types.DelegationDistInfo, sdk.DecCoins) {
 
 	wc := k.GetWithdrawContext(ctx, valAddr)
 	valInfo := k.GetValidatorDistInfo(ctx, valAddr)
@@ -116,7 +116,7 @@ func (k Keeper) withdrawDelegationReward(ctx sdk.Context,
 
 // get all rewards for all delegations of a delegator
 func (k Keeper) currentDelegationReward(ctx sdk.Context, delAddr sdk.AccAddress,
-	valAddr sdk.ValAddress) types.DecCoins {
+	valAddr sdk.ValAddress) sdk.DecCoins {
 
 	wc := k.GetWithdrawContext(ctx, valAddr)
 
@@ -137,7 +137,7 @@ func (k Keeper) currentDelegationReward(ctx sdk.Context, delAddr sdk.AccAddress,
 // NOTE: This gets called "onDelegationSharesModified",
 // meaning any changes to bonded coins
 func (k Keeper) WithdrawToDelegator(ctx sdk.Context, feePool types.FeePool,
-	delAddr sdk.AccAddress, amount types.DecCoins) {
+	delAddr sdk.AccAddress, amount sdk.DecCoins) {
 
 	withdrawAddr := k.GetDelegatorWithdrawAddr(ctx, delAddr)
 	coinsToAdd, change := amount.TruncateDecimal()
@@ -192,9 +192,9 @@ func (k Keeper) WithdrawDelegationRewardsAll(ctx sdk.Context, delAddr sdk.AccAdd
 }
 
 func (k Keeper) withdrawDelegationRewardsAll(ctx sdk.Context,
-	delAddr sdk.AccAddress) types.DecCoins {
+	delAddr sdk.AccAddress) sdk.DecCoins {
 
-	withdraw := types.DecCoins{}
+	withdraw := sdk.DecCoins{}
 
 	// iterate over all the delegations
 	operationAtDelegation := func(_ int64, del sdk.Delegation) (stop bool) {
@@ -215,10 +215,10 @@ func (k Keeper) withdrawDelegationRewardsAll(ctx sdk.Context,
 
 // get all rewards for all delegations of a delegator
 func (k Keeper) CurrentDelegationRewardsAll(ctx sdk.Context,
-	delAddr sdk.AccAddress) types.DecCoins {
+	delAddr sdk.AccAddress) sdk.DecCoins {
 
 	// iterate over all the delegations
-	total := types.DecCoins{}
+	total := sdk.DecCoins{}
 	operationAtDelegation := func(_ int64, del sdk.Delegation) (stop bool) {
 		valAddr := del.GetValidatorAddr()
 		est := k.currentDelegationReward(ctx, delAddr, valAddr)

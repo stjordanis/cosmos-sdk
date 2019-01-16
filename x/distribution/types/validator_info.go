@@ -33,18 +33,18 @@ type ValidatorDistInfo struct {
 
 	FeePoolWithdrawalHeight int64 `json:"fee_pool_withdrawal_height"` // last height this validator withdrew from the global pool
 
-	DelAccum      TotalAccum `json:"del_accum"`      // total accumulation factor held by delegators
-	DelPool       DecCoins   `json:"del_pool"`       // rewards owed to delegators, commission has already been charged (includes proposer reward)
-	ValCommission DecCoins   `json:"val_commission"` // commission collected by this validator (pending withdrawal)
+	DelAccum      TotalAccum   `json:"del_accum"`      // total accumulation factor held by delegators
+	DelPool       sdk.DecCoins `json:"del_pool"`       // rewards owed to delegators, commission has already been charged (includes proposer reward)
+	ValCommission sdk.DecCoins `json:"val_commission"` // commission collected by this validator (pending withdrawal)
 }
 
 func NewValidatorDistInfo(operatorAddr sdk.ValAddress, currentHeight int64) ValidatorDistInfo {
 	return ValidatorDistInfo{
 		OperatorAddr:            operatorAddr,
 		FeePoolWithdrawalHeight: currentHeight,
-		DelPool:                 DecCoins{},
+		DelPool:                 sdk.DecCoins{},
 		DelAccum:                NewTotalAccum(currentHeight),
-		ValCommission:           DecCoins{},
+		ValCommission:           sdk.DecCoins{},
 	}
 }
 
@@ -107,19 +107,19 @@ func (vi ValidatorDistInfo) TakeFeePoolRewards(wc WithdrawContext) (
 
 // withdraw commission rewards
 func (vi ValidatorDistInfo) WithdrawCommission(wc WithdrawContext) (
-	vio ValidatorDistInfo, fpo FeePool, withdrawn DecCoins) {
+	vio ValidatorDistInfo, fpo FeePool, withdrawn sdk.DecCoins) {
 
 	vi, fp := vi.TakeFeePoolRewards(wc)
 
 	withdrawalTokens := vi.ValCommission
-	vi.ValCommission = DecCoins{} // zero
+	vi.ValCommission = sdk.DecCoins{} // zero
 
 	return vi, fp, withdrawalTokens
 }
 
 // get the validator's pool rewards at this current state,
 func (vi ValidatorDistInfo) CurrentPoolRewards(
-	wc WithdrawContext) DecCoins {
+	wc WithdrawContext) sdk.DecCoins {
 
 	fp := wc.FeePool
 	totalValAccum := fp.GetTotalValAccum(wc.Height, wc.TotalPower)
@@ -137,7 +137,7 @@ func (vi ValidatorDistInfo) CurrentPoolRewards(
 
 // get the validator's commission pool rewards at this current state,
 func (vi ValidatorDistInfo) CurrentCommissionRewards(
-	wc WithdrawContext) DecCoins {
+	wc WithdrawContext) sdk.DecCoins {
 
 	fp := wc.FeePool
 	totalValAccum := fp.GetTotalValAccum(wc.Height, wc.TotalPower)

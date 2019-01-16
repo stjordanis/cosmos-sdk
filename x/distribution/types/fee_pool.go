@@ -8,9 +8,9 @@ import (
 
 // global fee pool for distribution
 type FeePool struct {
-	TotalValAccum TotalAccum `json:"val_accum"`      // total valdator accum held by validators
-	ValPool       DecCoins   `json:"val_pool"`       // funds for all validators which have yet to be withdrawn
-	CommunityPool DecCoins   `json:"community_pool"` // pool for community funds yet to be spent
+	TotalValAccum TotalAccum   `json:"val_accum"`      // total valdator accum held by validators
+	ValPool       sdk.DecCoins `json:"val_pool"`       // funds for all validators which have yet to be withdrawn
+	CommunityPool sdk.DecCoins `json:"community_pool"` // pool for community funds yet to be spent
 }
 
 // update total validator accumulation factor
@@ -29,8 +29,8 @@ func (f FeePool) GetTotalValAccum(height int64, totalBondedTokens sdk.Dec) sdk.D
 func InitialFeePool() FeePool {
 	return FeePool{
 		TotalValAccum: NewTotalAccum(0),
-		ValPool:       DecCoins{},
-		CommunityPool: DecCoins{},
+		ValPool:       sdk.DecCoins{},
+		CommunityPool: sdk.DecCoins{},
 	}
 }
 

@@ -48,7 +48,7 @@ func (di DelegationDistInfo) GetDelAccum(height int64, delegatorShares sdk.Dec) 
 //   (see comment on TakeFeePoolRewards for more info)
 func (di DelegationDistInfo) WithdrawRewards(wc WithdrawContext, vi ValidatorDistInfo,
 	totalDelShares, delegatorShares sdk.Dec) (
-	DelegationDistInfo, ValidatorDistInfo, FeePool, DecCoins) {
+	DelegationDistInfo, ValidatorDistInfo, FeePool, sdk.DecCoins) {
 
 	fp := wc.FeePool
 	vi = vi.UpdateTotalDelAccum(wc.Height, totalDelShares)
@@ -56,7 +56,7 @@ func (di DelegationDistInfo) WithdrawRewards(wc WithdrawContext, vi ValidatorDis
 	// Break out to prevent a divide by zero.
 	if vi.DelAccum.Accum.IsZero() {
 		di.DelPoolWithdrawalHeight = wc.Height
-		return di, vi, fp, DecCoins{}
+		return di, vi, fp, sdk.DecCoins{}
 	}
 
 	vi, fp = vi.TakeFeePoolRewards(wc)
@@ -74,7 +74,7 @@ func (di DelegationDistInfo) WithdrawRewards(wc WithdrawContext, vi ValidatorDis
 	for i, decCoin := range withdrawalTokens {
 		poolDenomAmount := vi.DelPool.AmountOf(decCoin.Denom)
 		if decCoin.Amount.GT(poolDenomAmount) {
-			withdrawalTokens[i] = NewDecCoinFromDec(decCoin.Denom, poolDenomAmount)
+			withdrawalTokens[i] = sdk.NewDecCoinFromDec(decCoin.Denom, poolDenomAmount)
 		}
 	}
 
@@ -107,12 +107,12 @@ func (di DelegationDistInfo) WithdrawRewards(wc WithdrawContext, vi ValidatorDis
 
 // get the delegators rewards at this current state,
 func (di DelegationDistInfo) CurrentRewards(wc WithdrawContext, vi ValidatorDistInfo,
-	totalDelShares, delegatorShares sdk.Dec) DecCoins {
+	totalDelShares, delegatorShares sdk.Dec) sdk.DecCoins {
 
 	totalDelAccum := vi.GetTotalDelAccum(wc.Height, totalDelShares)
 
 	if vi.DelAccum.Accum.IsZero() {
-		return DecCoins{}
+		return sdk.DecCoins{}
 	}
 
 	rewards := vi.CurrentPoolRewards(wc)

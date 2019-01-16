@@ -2,7 +2,6 @@ package keeper
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/distribution/types"
 )
 
 // Allocate fees handles distribution of the collected fees
@@ -16,7 +15,7 @@ func (k Keeper) AllocateTokens(ctx sdk.Context, percentVotes sdk.Dec, proposer s
 	// get the fees which have been getting collected through all the
 	// transactions in the block
 	feesCollected := k.feeCollectionKeeper.GetCollectedFees(ctx)
-	feesCollectedDec := types.NewDecCoins(feesCollected)
+	feesCollectedDec := sdk.NewDecCoins(feesCollected)
 
 	feePool := k.GetFeePool(ctx)
 	// Temporary workaround to keep CanWithdrawInvariant happy.
